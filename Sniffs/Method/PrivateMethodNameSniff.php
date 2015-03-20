@@ -18,21 +18,12 @@ class YACS_Sniffs_Method_PrivateMethodNameSniff implements PHP_CodeSniffer_Sniff
      */
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
-        $tokenLast = $phpcsFile->findPrevious(
-                         array(T_PRIVATE),
-                         $stackPtr,
-                         max(0, $stackPtr - 10)
-                     );
-
-        if ($tokenLast !== false) {
+        $properties = $phpcsFile->getMethodProperties($stackPtr);
+        if ($properties['scope'] == 'private') {
             $tokens = $phpcsFile->getTokens();
-            $tokenNext = $phpcsFile->findNext(
-                             array(T_STRING),
-                             $stackPtr,
-                             $stackPtr + 5
-                         );
+            $name = $phpcsFile->getDeclarationName($stackPtr);
 
-            if ($tokenNext !== false && $tokens[$tokenNext]['content']{0} != '_') {
+            if ($tokenNext !== false && $name{0} != '_') {
                 $error = "Private method name should start with an underscore(_).";
                 $phpcsFile->addError($error, $stackPtr);
             }
