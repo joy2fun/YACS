@@ -23,7 +23,7 @@ class YACS_Sniffs_Method_PrivateMethodNameSniff implements PHP_CodeSniffer_Sniff
             $tokens = $phpcsFile->getTokens();
             $name = $phpcsFile->getDeclarationName($stackPtr);
 
-            if ($tokenNext !== false && $name{0} != '_') {
+            if ($name{0} != '_') {
                 $error = "Private method name should start with an underscore(_).";
                 $phpcsFile->addError($error, $stackPtr);
             }
